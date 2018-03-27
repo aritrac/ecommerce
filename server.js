@@ -16,12 +16,6 @@ app.get('/catname', function(req,res){
     res.json('batman');
 });
 
-//app.post();
-
-//app.put();
-
-//app.delete();
-
 app.listen(process.env.PORT, process.env.IP, function(err){
     if(err)
         throw err;
