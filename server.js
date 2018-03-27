@@ -3,6 +3,8 @@ var morgan              = require('morgan');
 var mongoose            = require('mongoose');
 var bodyParser          = require('body-parser');
 var User                = require('./models/user');
+var ejs                 = require('ejs');
+var ejsMate             = require('ejs-mate');
 var app = express();
 
 mongoose.connect('mongodb://curly_braces:arit12345@ds247058.mlab.com:47058/ecommerce',function(err){
@@ -17,6 +19,8 @@ mongoose.connect('mongodb://curly_braces:arit12345@ds247058.mlab.com:47058/ecomm
 app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
+app.engine('ejs',ejsMate);
+app.set('view engine','ejs');
 
 app.post('/create-user', function(req,res, next){
     var user =new User();
@@ -33,6 +37,14 @@ app.post('/create-user', function(req,res, next){
         
         res.json("Successfully created a new user");
     });
+});
+
+app.get('/',function(req,res){
+    res.render('home');
+});
+
+app.get('/about',function(req,res){
+    res.render('about');
 });
 
 app.listen(process.env.PORT, process.env.IP, function(err){
