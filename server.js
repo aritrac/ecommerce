@@ -4,6 +4,9 @@ var morgan              = require('morgan');
 var mongoose            = require('mongoose');
 var ejs                 = require('ejs');
 var ejsMate             = require('ejs-mate');
+var session             = require('express-session');
+var cookieParser        = require('cookie-parser');
+var flash               = require('express-flash');
 var app = express();
 
 var mainRoutes          = require("./routes/main");
@@ -16,6 +19,13 @@ app.engine('ejs',ejsMate);
 app.set('view engine','ejs');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(session({
+    secret: "ironman is awesome!",
+    resave: false,
+    saveUninitialized: false
+}));
+app.use(cookieParser());
+app.use(flash());
 
 mongoose.connect('mongodb://curly_braces:arit12345@ds247058.mlab.com:47058/ecommerce',function(err){
     if(err) {
