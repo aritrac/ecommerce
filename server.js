@@ -7,6 +7,9 @@ var ejsMate             = require('ejs-mate');
 var session             = require('express-session');
 var cookieParser        = require('cookie-parser');
 var flash               = require('express-flash');
+var secret              = require('./config/secret');
+var MongoStore          = require('connect-mongo')(session);
+var passport            = require('passport');
 var app = express();
 
 var mainRoutes          = require("./routes/main");
@@ -20,14 +23,17 @@ app.set('view engine','ejs');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(session({
-    secret: "ironman is awesome!",
+    secret: secret.secretKey,
     resave: false,
-    saveUninitialized: false
+    saveUninitialized: false,
+    store: new MongoStore({url:secret.database, autoReconnect: true})
 }));
 app.use(cookieParser());
 app.use(flash());
+app.use(passport.initialize());
+app.use(passport.session());
 
-mongoose.connect('mongodb://curly_braces:arit12345@ds247058.mlab.com:47058/ecommerce',function(err){
+mongoose.connect(secret.database,function(err){
     if(err) {
         console.log(err);
     }else{
@@ -42,5 +48,5 @@ app.use(userRoutes);
 app.listen(process.env.PORT, process.env.IP, function(err){
     if(err)
         throw err;
-    console.log("Server is up");
+    console.log("Server is up on " + process.env.PORT + " and IP is " + process.env.IP);
 });
