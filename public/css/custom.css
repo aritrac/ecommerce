@@ -1,0 +1,12 @@
+body {
+    padding-top: 100px;
+}
+
+.col-centered {
+    float: none;
+    margin: 0 auto;
+}
+
+#navbar-gap {
+    margin-top: -4%;
+}
