@@ -10,11 +10,13 @@ router.get('/:name',function(req,res,next){
             Category.findOne({name: req.params.name}, function(err, category){
                 if(err) return next(err);
                 callback(null,category);
+                console.log(category);
             });   
         },
         function(category,callback){
             for(var i = 0; i < 30; i++){
                 var product = new Product();
+                console.log(category._id);
                 product.category = category._id;
                 product.name = faker.commerce.productName();
                 product.price = faker.commerce.price();
