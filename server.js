@@ -10,10 +10,12 @@ var flash               = require('express-flash');
 var secret              = require('./config/secret');
 var MongoStore          = require('connect-mongo')(session);
 var passport            = require('passport');
+var Category            = require('./models/category');
 var app = express();
 
 var mainRoutes          = require("./routes/main");
 var userRoutes          = require("./routes/user");
+var adminRoutes         = require("./routes/admin");
 
 //Middleware
 app.use(express.static(__dirname + "/public"));
@@ -28,6 +30,14 @@ app.use(session({
     saveUninitialized: false,
     store: new MongoStore({url:secret.database, autoReconnect: true})
 }));
+app.use(function(req,res,next){
+    Category.find({},function(err,categories){
+        if(err) return next(err);
+        res.locals.categories = categories;
+        next();
+    });
+});
+
 app.use(cookieParser());
 app.use(flash());
 app.use(passport.initialize());
@@ -48,6 +58,7 @@ mongoose.connect(secret.database,function(err){
 
 app.use(mainRoutes);
 app.use(userRoutes);
+app.use(adminRoutes);
 
 app.listen(process.env.PORT, process.env.IP, function(err){
     if(err)
