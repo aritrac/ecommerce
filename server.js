@@ -16,6 +16,7 @@ var app = express();
 var mainRoutes          = require("./routes/main");
 var userRoutes          = require("./routes/user");
 var adminRoutes         = require("./routes/admin");
+var apiRoutes           = require("./api/api");
 
 //Middleware
 app.use(express.static(__dirname + "/public"));
@@ -59,6 +60,8 @@ mongoose.connect(secret.database,function(err){
 app.use(mainRoutes);
 app.use(userRoutes);
 app.use(adminRoutes);
+app.use('/api',apiRoutes);
+
 
 app.listen(process.env.PORT, process.env.IP, function(err){
     if(err)
