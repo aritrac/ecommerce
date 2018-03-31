@@ -70,6 +70,7 @@ router.get('/cart', function(req, res, next) {
 
 router.post('/product/:product_id', function(req, res, next) {
   Cart.findOne({ owner: req.user._id }, function(err, cart) {
+    if(err) return next(err);
     cart.items.push({
       item: req.body.product_id,
       price: parseFloat(req.body.priceValue),
@@ -88,6 +89,7 @@ router.post('/product/:product_id', function(req, res, next) {
 
 router.post('/remove', function(req, res, next) {
   Cart.findOne({ owner: req.user._id }, function(err, foundCart) {
+    if(err) return next(err);
     foundCart.items.pull(String(req.body.item));
 
     foundCart.total = (foundCart.total - parseFloat(req.body.price)).toFixed(2);
@@ -185,6 +187,7 @@ router.post('/payment', function(req, res, next) {
       },
       function(cart, callback) {
         User.findOne({ _id: req.user._id }, function(err, user) {
+          if(err) return next(err);
           if (user) {
             for (var i = 0; i < cart.items.length; i++) {
               user.history.push({
@@ -202,6 +205,7 @@ router.post('/payment', function(req, res, next) {
       },
       function(user) {
         Cart.update({ owner: user._id }, { $set: { items: [], total: 0 }}, function(err, updated) {
+          if(err) return next(err);
           if (updated) {
             res.redirect('/');
           }
