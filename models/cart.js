@@ -5,7 +5,7 @@ var CartSchema = new Schema({
     owner: {type: Schema.Types.ObjectId, ref: 'User'},
     total: {type: Number, default: 0},
     items: [{
-        item: {type: Schema.Types.ObjectId, ref: 'Product'},
+        item: {type: Schema.Types.ObjectId, ref: 'Product', default: null},
         quantity: {type: Number, default: 0},
         price: {type: Number, default: 0}
     }]
