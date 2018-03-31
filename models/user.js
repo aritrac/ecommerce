@@ -10,6 +10,8 @@ var UserSchema = new mongoose.Schema({
     email: {type: String, unique: true, lowercase: true},
     password: String,
     username: String,
+    facebook: String,
+    tokens: Array,
     
     profile: {
         name: {type: String, default: ''},
